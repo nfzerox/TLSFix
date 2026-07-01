@@ -99,14 +99,15 @@ static OSStatus my_Write(SSLContextRef c, const void *data, size_t len, size_t *
     sh_release(s);
     return rv;
 }
-static OSStatus (*o_DisposeContext)(SSLContextRef);
-static OSStatus my_DisposeContext(SSLContextRef c) { sh_free(c); return o_DisposeContext(c); }
+// SSLDisposeContext is intentionally not hooked, function too small, MSHookFunction overwrites adjacent memory.
 static OSStatus (*o_Close)(SSLContextRef);
 static OSStatus my_Close(SSLContextRef c) {
     Shadow *s = sh_get(c);
     if (s && s->state == 2 && s->ssl) SSL_shutdown(s->ssl);
     sh_release(s);
-    return o_Close(c);
+    OSStatus r = o_Close(c);
+    sh_free(c); 
+    return r;
 }
 static OSStatus (*o_GetSessionState)(SSLContextRef, SSLSessionState *);
 static OSStatus my_GetSessionState(SSLContextRef c, SSLSessionState *st) {
@@ -206,7 +207,6 @@ static void tlsfix_init(void) {
     hook("SSLRead",                        (void *)my_Read,              (void **)&o_Read);
     hook("SSLWrite",                       (void *)my_Write,             (void **)&o_Write);
     hook("SSLClose",                       (void *)my_Close,             (void **)&o_Close);
-    hook("SSLDisposeContext",              (void *)my_DisposeContext,    (void **)&o_DisposeContext);
     hook("SSLGetSessionState",             (void *)my_GetSessionState,   (void **)&o_GetSessionState);
     hook("SSLGetNegotiatedProtocolVersion",(void *)my_GetNegProto,       (void **)&o_GetNegProto);
     hook("SSLGetNegotiatedCipher",         (void *)my_GetNegCipher,      (void **)&o_GetNegCipher);
