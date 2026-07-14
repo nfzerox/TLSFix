@@ -1,0 +1,10 @@
+Package: com.skyglow.tlsfix
+Name: TLSFix
+Version: 1.1
+Architecture: iphoneos-arm
+Description: Fixes SSL/TLS protocols and communications from iPhoneOS 2 to iOS 9, so that these devices can talk to any modern cypher-enabled server or service again.
+Depends: mobilesubstrate
+Author: nfzerox, Requis
+Maintainer: nfzerox, Requis
+Section: Tweaks
+Conflicts: com.tlsfix

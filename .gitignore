@@ -1,6 +1,13 @@
-mbedtls-src/
-.mbobj/
-.stage/
+# Prebuilt OpenSSL (provide src/openssl: lib/{libcrypto,libssl}.a + include/, builtins baked in)
+src/openssl/
+
+# Build output / intermediates
+.build/
+Packages/
+*.deb
 *.dylib
-TLSFix.bundle/
+*.o
+
+# misc
 .DS_Store
+.claude/

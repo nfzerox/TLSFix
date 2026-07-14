@@ -1,1 +1,4 @@
-{ Filter = { Bundles = ( "com.apple.UIKit" ); }; }
+{ Filter = {
+    Bundles = ( "com.apple.CFNetwork" );
+    Mode = "Any";
+}; }
